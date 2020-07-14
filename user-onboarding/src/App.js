@@ -7,8 +7,9 @@ import Form from './form';
 function App() {
   return (
     <div className="App">
+      <h1>User-Onboarding Form</h1>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        {/* <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
@@ -20,6 +21,7 @@ function App() {
         >
           Learn React
         </a>
+         */}
         <Form />
       </header>
     </div>
