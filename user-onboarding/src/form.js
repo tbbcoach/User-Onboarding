@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as yup from 'yup';
 import axios from 'axios';
+import Input from './input';
 
 export default function Form() {
      
@@ -30,16 +31,17 @@ export default function Form() {
 
     const formSubmit = e => {
         e.preventDefault();
-        console.log("form submitted!");
+        // console.log("form submitted!");
         axios
             .post("https://reqres.in/api/users", formState)
-            .then(() => console.log("form submitted success"))
+            .then(() => console.log("form submitted success", formState))
             .catch(err => console.log(err));
     };
 
     const validateChange = e => {
+        e.persist();
         yup.reach(formSchema, e.target.name)
-        validateChange(e.target.value)
+        .validate(e.target.value)
             .then(valid =>
                 setErrors({
                     ...errors, [e.target.name]: ""
@@ -51,37 +53,47 @@ export default function Form() {
                 })
             );
     }
+
+    const inputChange = e => {
+        const value =
+            e.target.type === "checkbox" ? e.target.checked : e.target.value;
+        setFormState({ ...formState, [e.target.name]: value });
+        validateChange(e);
+    }
         return (
             // <div>Form starts here!</div>
 
-            <form>
-                <input
+            <form onSubmit={formSubmit}>
+                <Input
                     type='text'
                     name='name'
-                    // onChange={inputChange}
-                    // value={formState.name}
+                    onChange={inputChange}
+                    value={formState.name}
                     label="Name"
+                    errors={errors}
                 />
-                <input
+                <Input
                     type='text'
                     name='email'
-                    // onChange={inputChange}
-                    // value={formState.name}
+                    onChange={inputChange}
+                    value={formState.email}
                     label="Email"
+                    errors={errors}
                 />
-                <input
+                <Input
                     type='text'
                     name='password'
-                    // onChange={inputChange}
-                    // value={formState.name}
-                    label="Email"
+                    onChange={inputChange}
+                    value={formState.password}
+                    label="Password"
+                    errors={errors}
                 />
                 <label className="terms" htmlFor="terms">
-                    <input name="terms" type="checkbox" />
+                    <input name="terms" type="checkbox" onChange={inputChange} />
                
                  Terms & Conditions
                  </label>
-                <button>Submit</button>
+                <button disabled={buttonDisabled}>Submit</button>
             
 
             </form>
