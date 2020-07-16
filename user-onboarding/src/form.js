@@ -15,11 +15,12 @@ export default function Form() {
     const [formState, setFormState] = useState(defaultState);
     const [errors, setErrors] = useState({ ...defaultState, terms: "" });
     const [buttonDisabled, setButtonDisabled] = useState(true);
+    const [users, setUsers] = useState([]);
 
     let formSchema = yup.object().shape({
         name: yup.string().required("Please provide your name."),
         email: yup.string().required("Email is a required field").email("Not a valid email address."),
-        password: yup.string().required(8, "Minimum of 8 characters required."),
+        password: yup.string().min(8, "Minimum of 8 characters required.").required('Please enter a password.'),
         terms: yup.boolean().oneOf([true], "Please agree to terms and conditions.")
     });
 
@@ -31,12 +32,16 @@ export default function Form() {
 
     const formSubmit = e => {
         e.preventDefault();
-        // console.log("form submitted!");
+        console.log("form submitted!");
         axios
             .post("https://reqres.in/api/users", formState)
-            .then(() => console.log("form submitted success", formState))
+            .then(res => 
+                setUsers([...users, formState]),
+                console.log("form submitted success", users))
             .catch(err => console.log(err));
     };
+
+
 
     const validateChange = e => {
         e.persist();
