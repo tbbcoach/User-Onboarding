@@ -35,9 +35,12 @@ export default function Form() {
         console.log("form submitted!");
         axios
             .post("https://reqres.in/api/users", formState)
-            .then(res => 
-                setUsers([...users, formState]),
-                console.log("form submitted success", users))
+            .then(res => {
+                setUsers(res.data)
+                console.log(res.data)
+                console.log("form submitted success", users)
+            }
+                )
             .catch(err => console.log(err));
     };
 
@@ -98,9 +101,9 @@ export default function Form() {
                
                  Terms & Conditions
                  </label>
-                <button disabled={buttonDisabled}>Submit</button>
+                <button id='submit' disabled={buttonDisabled}>Submit</button>
             
-
+                {JSON.stringify(users, null, 2)}
             </form>
 
         );
